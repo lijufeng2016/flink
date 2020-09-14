@@ -149,7 +149,6 @@ public class StreamTaskTestHarness<OUT> {
 		this.executionConfig = new ExecutionConfig();
 
 		streamConfig = new StreamConfig(taskConfig);
-		streamConfig.setBufferTimeout(0);
 
 		outputSerializer = outputType.createSerializer(executionConfig);
 		outputStreamRecordSerializer = new StreamElementSerializer<>(outputSerializer);
@@ -167,7 +166,7 @@ public class StreamTaskTestHarness<OUT> {
 
 	@SuppressWarnings("unchecked")
 	public <OP extends StreamOperator<OUT>> OP getHeadOperator() {
-		return (OP) taskThread.task.getHeadOperator();
+		return (OP) taskThread.task.getMainOperator();
 	}
 
 	/**
