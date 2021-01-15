@@ -593,8 +593,7 @@ class CatalogTableITCase(isStreamingMode: Boolean) extends AbstractTestBase {
     tableEnv.executeSql(sourceDDL)
     tableEnv.executeSql(sinkDDL)
     expectedEx.expect(classOf[ValidationException])
-    expectedEx.expectMessage("Field types of query result and registered TableSink "
-      + "default_catalog.default_database.t2 do not match.")
+    expectedEx.expectMessage("Incompatible types for sink column 'c' at position 1.")
     tableEnv.executeSql(query).await()
   }
 
@@ -995,7 +994,7 @@ class CatalogTableITCase(isStreamingMode: Boolean) extends AbstractTestBase {
     assertEquals("cat1", tableEnv.getCurrentCatalog)
     tableEnv.executeSql("use catalog cat2")
     assertEquals("cat2", tableEnv.getCurrentCatalog)
-    assertEquals("cat2", tableEnv.executeSql("show current catalog").collect().next().toString)
+    assertEquals("+I[cat2]", tableEnv.executeSql("show current catalog").collect().next().toString)
   }
 
   @Test
@@ -1009,11 +1008,11 @@ class CatalogTableITCase(isStreamingMode: Boolean) extends AbstractTestBase {
     tableEnv.executeSql("use cat1.db1")
     assertEquals("db1", tableEnv.getCurrentDatabase)
     var currentDatabase = tableEnv.executeSql("show current database").collect().next().toString
-    assertEquals("db1", currentDatabase)
+    assertEquals("+I[db1]", currentDatabase)
     tableEnv.executeSql("use db2")
     assertEquals("db2", tableEnv.getCurrentDatabase)
     currentDatabase = tableEnv.executeSql("show current database").collect().next().toString
-    assertEquals("db2", currentDatabase)
+    assertEquals("+I[db2]", currentDatabase)
   }
 
   @Test
